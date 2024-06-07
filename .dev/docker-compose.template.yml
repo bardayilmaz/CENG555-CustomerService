@@ -1,0 +1,62 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:14.1-alpine
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=customerservice
+      - POSTGRES_USER=mezat
+      - POSTGRES_PASSWORD=12345
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - backend
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'admin@mezat.app'
+      PGADMIN_DEFAULT_PASSWORD: '123456'
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    image: customer-service:latest
+    container_name: backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - backend
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - JAVA_TOOL_OPTIONS=-Dspring.config.use-legacy-processing=true
+      - JWT_SECRET=${JWT_SECRET}
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - DB_URL=${DB_URL}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - KAFKA_LOCATION=${KAFKA_LOCATION}
+    restart: unless-stopped
+
+volumes:
+  postgres:
+    driver: local
+  pgadmin:
+    driver: local
+
+networks:
+  backend:
+    driver: bridge

@@ -24,8 +24,8 @@ public class Customer extends Auditable  {
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "is_premium")
-    private boolean isPremium;
+    @Column(name = "premium")
+    private boolean premium;
 
     @Column(name = "password")
     private String password;

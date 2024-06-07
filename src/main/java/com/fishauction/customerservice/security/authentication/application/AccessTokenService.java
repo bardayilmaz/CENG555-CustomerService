@@ -23,7 +23,9 @@ public class AccessTokenService {
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtConfig.getJwtSecret()).parseClaimsJws(authToken);
+            String jwtSecret = jwtConfig.getJwtSecret();
+            JwtParser parser = Jwts.parser().setSigningKey(jwtSecret);
+            parser.parseClaimsJws(authToken);  // Use parseClaimsJws for signed tokens
             return true;
         } catch (SignatureException e) {
             log.error("Invalid JWT signature: {}", e.getMessage());

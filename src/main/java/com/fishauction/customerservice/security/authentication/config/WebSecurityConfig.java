@@ -60,7 +60,7 @@ public class WebSecurityConfig {
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(unauthorizedHandler))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/swagger**").permitAll()
-                        .requestMatchers("/api/fish-box-records/**").authenticated()
+//                        .requestMatchers("/api/fish-box-records/**").authenticated()
                         .anyRequest().permitAll())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

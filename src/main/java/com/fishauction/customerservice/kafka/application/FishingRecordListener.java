@@ -1,5 +1,6 @@
 package com.fishauction.customerservice.kafka.application;
 
+import com.fishauction.customerservice.fishbox.application.FishBoxRecordService;
 import com.fishauction.customerservice.fishbox.domain.model.entity.FishBoxRecord;
 import com.fishauction.customerservice.fishbox.domain.repository.FishBoxRecordRepository;
 import jakarta.transaction.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
 public class FishingRecordListener {
 
     private final FishBoxRecordRepository fishBoxRecordRepository;
+    private final FishBoxRecordService fishBoxRecordService;
 
     @KafkaListener(topics = "test-topic", groupId = "${spring.kafka.group-id}")
     public void listen(List<FishBoxRecord> record) {
@@ -31,5 +33,6 @@ public class FishingRecordListener {
             System.out.println("Received record weight: " + fishBoxRecord.getAuctionDate());
             fishBoxRecordRepository.save(fishBoxRecord);
         }
+        fishBoxRecordService.sendDailyMailToPremiumCustomers();
     }
 }
