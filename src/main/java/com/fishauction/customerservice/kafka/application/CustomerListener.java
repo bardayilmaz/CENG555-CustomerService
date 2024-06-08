@@ -15,7 +15,7 @@ public class CustomerListener {
 
     private final CustomerRepository customerRepository;
 
-    @KafkaListener(topics = "customerRegistered", groupId = "${spring.kafka.group-id}", containerFactory = "kafkaListenerContainerFactoryCustomer   ")
+    @KafkaListener(topics = "${kafka.customer-topic}", groupId = "${spring.kafka.group-id}", containerFactory = "kafkaListenerContainerFactoryCustomer")
     public void listen(CustomerResponse record) {
         // Handle the consumed record
         System.out.println("Received record: " + record);

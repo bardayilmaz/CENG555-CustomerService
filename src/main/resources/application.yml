@@ -60,3 +60,9 @@ springdoc:
     path: /api-docs
     groups:
       enabled: true
+
+kafka:
+  fish-box-topic: ${FISH_BOX_TOPIC}
+  customer-topic: ${CUSTOMER_TOPIC}
+  auction-topic: ${AUCTION_TOPIC}
+

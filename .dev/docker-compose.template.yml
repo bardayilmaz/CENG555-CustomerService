@@ -49,6 +49,9 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - KAFKA_LOCATION=${KAFKA_LOCATION}
+      - FISH_BOX_TOPIC=${FISH_BOX_TOPIC}
+      - CUSTOMER_TOPIC=${CUSTOMER_TOPIC}
+      - AUCTION_TOPIC=${AUCTION_TOPIC}
     restart: unless-stopped
 
 volumes:

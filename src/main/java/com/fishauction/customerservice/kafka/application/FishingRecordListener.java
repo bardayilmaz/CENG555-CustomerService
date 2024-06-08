@@ -5,6 +5,7 @@ import com.fishauction.customerservice.fishbox.domain.model.entity.FishBoxRecord
 import com.fishauction.customerservice.fishbox.domain.repository.FishBoxRecordRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class FishingRecordListener {
     private final FishBoxRecordRepository fishBoxRecordRepository;
     private final FishBoxRecordService fishBoxRecordService;
 
-    @KafkaListener(topics = "test-topic", groupId = "${spring.kafka.group-id}")
+    @KafkaListener(topics = "${kafka.fish-box-topic}", groupId = "${spring.kafka.group-id}")
     public void listen(List<FishBoxRecord> record) {
         // Handle the consumed record
         System.out.println("Received record: " + record);

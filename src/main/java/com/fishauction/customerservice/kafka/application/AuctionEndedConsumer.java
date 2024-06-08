@@ -17,7 +17,7 @@ public class AuctionEndedConsumer {
 
     private final DailyFishBoxCanBePublishedRepository dailyFishBoxCanBePublishedRepository;
 
-    @KafkaListener(topics = "auction-ended", groupId = "group_id", containerFactory = "kafkaListenerContainerFactoryAuctionEnded")
+    @KafkaListener(topics = "${kafka.auction-topic}", groupId = "group_id", containerFactory = "kafkaListenerContainerFactoryAuctionEnded")
     public void consumeAuctionEnded(AuctionEndedBody auctionEndedBody) {
         DailyFishBoxCanBePublished dailyFishBoxCanBePublished = new DailyFishBoxCanBePublished();
         dailyFishBoxCanBePublished.setDate(LocalDate.now());
