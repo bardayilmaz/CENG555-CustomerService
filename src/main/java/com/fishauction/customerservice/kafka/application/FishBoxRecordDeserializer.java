@@ -26,6 +26,8 @@ public class FishBoxRecordDeserializer implements Deserializer<List<FishBoxRecor
     @Override
     public List<FishBoxRecord> deserialize(String topic, byte[] data) {
         try {
+            System.out.println("Deserializing data: " + data);
+            System.out.println("topic " + topic);
             return objectMapper.readValue(data, new TypeReference<>() {});
         } catch (Exception e) {
             throw new RuntimeException("Failed to deserialize JSON message", e);

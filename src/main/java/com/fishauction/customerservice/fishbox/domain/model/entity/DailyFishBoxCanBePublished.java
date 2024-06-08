@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "fish_box_record")
+@Table(name = "fish_box_can_be_published")
 public class DailyFishBoxCanBePublished extends Auditable {
 
     @Id

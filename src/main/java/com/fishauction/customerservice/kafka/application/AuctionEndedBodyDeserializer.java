@@ -1,31 +1,39 @@
 package com.fishauction.customerservice.kafka.application;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fishauction.customerservice.kafka.model.AuctionEndedBody;
+import org.apache.kafka.common.serialization.Deserializer;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
-public class AuctionEndedBodyDeserializer extends JsonDeserializer<AuctionEndedBody> {
+public class AuctionEndedBodyDeserializer implements Deserializer<AuctionEndedBody> {
 
 
+    private ObjectMapper objectMapper;
+
+    public AuctionEndedBodyDeserializer () {
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule()); // Register JavaTimeModule
+    }
 
     @Override
-    public AuctionEndedBody deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+    public void configure(Map<String, ?> configs, boolean isKey) {
+        // No special configuration needed
+    }
 
-        Long auctionId = node.get("auction_id").asLong();
-        LocalDateTime auctionEndTime = LocalDateTime.parse(node.get("auction_end_time").asText(), DateTimeFormatter.ISO_DATE_TIME);
-        Integer totalTrays = node.get("total_trays").asInt();
-        Integer totalSoldTrays = node.get("total_sold_trays").asInt();
-        Integer totalUnsoldTrays = node.get("total_unsold_trays").asInt();
-        Double totalRevenue = node.get("total_revenue").asDouble();
+    @Override
+    public AuctionEndedBody deserialize(String topic, byte[] data) {
+        try {
+            return objectMapper.readValue(data, new TypeReference<>() {});
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to deserialize JSON message", e);
+        }
+    }
 
-        return new AuctionEndedBody(auctionId, auctionEndTime, totalTrays, totalSoldTrays, totalUnsoldTrays, totalRevenue);
+    @Override
+    public void close() {
+        // No special cleanup needed
     }
 }

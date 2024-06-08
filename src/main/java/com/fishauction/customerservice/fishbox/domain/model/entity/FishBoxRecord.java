@@ -5,13 +5,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "fish_box_record")
-public class FishBoxRecord extends Auditable {
+public class FishBoxRecord extends Auditable implements Serializable {
 
     @Id
     @Column(name = "id")

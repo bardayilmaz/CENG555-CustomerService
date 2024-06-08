@@ -1,7 +1,11 @@
 package com.fishauction.customerservice.kafka.config;
 
 import com.fishauction.customerservice.fishbox.domain.model.entity.FishBoxRecord;
+import com.fishauction.customerservice.kafka.application.AuctionEndedBodyDeserializer;
+import com.fishauction.customerservice.kafka.application.CustomerDeserializer;
 import com.fishauction.customerservice.kafka.application.FishBoxRecordDeserializer;
+import com.fishauction.customerservice.kafka.model.AuctionEndedBody;
+import com.fishauction.customerservice.kafka.model.CustomerResponse;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +45,40 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, List<FishBoxRecord>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, List<FishBoxRecord>> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, CustomerResponse> consumerFactoryCustomer() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaAddress);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, CustomerDeserializer.class);
+        return new DefaultKafkaConsumerFactory<>(props);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, CustomerResponse> kafkaListenerContainerFactoryCustomer() {
+        ConcurrentKafkaListenerContainerFactory<String, CustomerResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryCustomer());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, AuctionEndedBody> consumerFactoryAuctionEnded() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaAddress);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, AuctionEndedBodyDeserializer.class);
+        return new DefaultKafkaConsumerFactory<>(props);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, AuctionEndedBody> kafkaListenerContainerFactoryAuctionEnded() {
+        ConcurrentKafkaListenerContainerFactory<String, AuctionEndedBody> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryAuctionEnded());
         return factory;
     }
 }

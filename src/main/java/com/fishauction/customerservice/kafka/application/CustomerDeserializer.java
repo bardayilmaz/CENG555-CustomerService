@@ -3,13 +3,12 @@ package com.fishauction.customerservice.kafka.application;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fishauction.customerservice.customer.domain.model.entity.Customer;
+import com.fishauction.customerservice.kafka.model.CustomerResponse;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import java.util.Map;
 
-
-public class CustomerDeserializer implements Deserializer<Customer> {
+public class CustomerDeserializer implements Deserializer<CustomerResponse> {
 
     private ObjectMapper objectMapper;
 
@@ -24,7 +23,7 @@ public class CustomerDeserializer implements Deserializer<Customer> {
     }
 
     @Override
-    public Customer deserialize(String topic, byte[] data) {
+    public CustomerResponse deserialize(String topic, byte[] data) {
         try {
             return objectMapper.readValue(data, new TypeReference<>() {});
         } catch (Exception e) {
