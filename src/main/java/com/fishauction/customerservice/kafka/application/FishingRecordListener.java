@@ -33,6 +33,7 @@ public class FishingRecordListener {
             System.out.println("Received record weight: " + fishBoxRecord.getAuctionDate());
             fishBoxRecordRepository.save(fishBoxRecord);
         }
+        System.out.println("WRITE ALL, NOW SEND MAIL TO PREMIUM CUSTOMERS");
         fishBoxRecordService.sendDailyMailToPremiumCustomers();
     }
 }
